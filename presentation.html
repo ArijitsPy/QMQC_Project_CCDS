@@ -1,407 +1,670 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Perfect [[5,1,3]] QEC Presentation</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfect [[5,1,3]] · QEC exploration report</title>
+  <!-- MathJax for quantum notation -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+  <!-- Fonts & base style — qec-ppt.netlify.app aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --ink: #151515;
-      --paper: #f7f9fb;
-      --green: #1f7a4d;
-      --blue: #2a6f9e;
-      --rose: #a3435a;
-      --gold: #9a7a16;
-      --line: #d8dde3;
-    }
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      margin: 0;
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      color: var(--ink);
-      background: var(--paper);
+      background: #0b0e14;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      color: #e3e9f2;
       overflow: hidden;
+      height: 100vh;
+      width: 100vw;
     }
+
+    /* dark academic palette */
+    :root {
+      --bg-deep: #0b0e14;
+      --surface-1: #141a24;
+      --surface-2: #1b2330;
+      --accent-green: #2ea86c;
+      --accent-blue: #3a8fd4;
+      --accent-rose: #d46a7e;
+      --accent-gold: #d4a33a;
+      --border-dim: #2a3442;
+      --text-primary: #f0f4fa;
+      --text-secondary: #b0c0d0;
+      --shadow-lg: 0 20px 35px -8px rgba(0,0,0,0.6);
+    }
+
+    /* presentation deck */
     .deck {
-      width: 100vw;
-      height: 100vh;
       position: relative;
-    }
-    .slide {
-      display: none;
       width: 100vw;
       height: 100vh;
-      padding: 52px 72px 76px;
-      background: linear-gradient(180deg, #ffffff 0%, #f7f9fb 100%);
-      animation: enter 360ms ease-out;
     }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 60px 80px;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.28s ease;
+      background: radial-gradient(circle at 20% 30%, #1a2332 0%, #0c111c 100%);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-blue) var(--surface-2);
+    }
+
     .slide.active {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 36px;
-      align-items: center;
-    }
-    .slide.single.active {
       display: flex;
       flex-direction: column;
+      opacity: 1;
+    }
+
+    /* slide layouts */
+    .slide.two-column {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .slide.centered {
       justify-content: center;
       align-items: center;
       text-align: center;
     }
-    @keyframes enter {
-      from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.99);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+
+    .slide.report-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px 40px;
+      align-content: start;
     }
-    h1 {
-      font-size: 58px;
-      line-height: 1.04;
-      margin: 0 0 22px;
-      letter-spacing: 0;
-    }
-    h2 {
-      font-size: 42px;
-      line-height: 1.08;
-      margin: 0 0 18px;
-      letter-spacing: 0;
-    }
-    p, li {
-      font-size: 24px;
-      line-height: 1.36;
-    }
-    p {
-      margin: 0 0 18px;
-    }
-    ul {
-      margin: 12px 0 0;
-      padding-left: 28px;
-    }
-    code {
-      background: #eef2f5;
-      border: 1px solid var(--line);
-      padding: 3px 6px;
-      border-radius: 6px;
-      font-family: "JetBrains Mono", Consolas, monospace;
-      font-size: 0.92em;
-    }
-    .tag {
-      display: inline-block;
-      border: 1px solid var(--line);
-      border-left: 6px solid var(--green);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-weight: 700;
-      margin-bottom: 18px;
-      background: #ffffff;
-    }
-    .formula {
-      font-size: 30px;
-      line-height: 1.35;
-      padding: 16px 18px;
-      border: 1px solid var(--line);
-      border-left: 8px solid var(--blue);
-      border-radius: 8px;
-      background: #ffffff;
-      margin: 18px 0;
-      font-family: "JetBrains Mono", Consolas, monospace;
-    }
-    .image-frame {
-      width: 100%;
-      min-height: 260px;
+
+    /* header area (like netlify qec-ppt) */
+    .slide-header {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #ffffff;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: 0 18px 44px rgba(21, 21, 21, 0.08);
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border-dim);
+      padding-bottom: 12px;
     }
+
+    .slide-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      border-left: 4px solid var(--accent-green);
+      padding-left: 14px;
+    }
+
+    .slide-number {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    h1 {
+      font-size: 3.8rem;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      color: white;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.55;
+      margin-bottom: 1.2rem;
+      color: var(--text-secondary);
+    }
+
+    ul, ol {
+      padding-left: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    li {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+
+    code, .code-block {
+      font-family: "JetBrains Mono", monospace;
+      background: #1e2a3a;
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: #c0d4f0;
+      border: 1px solid #2e405b;
+      font-size: 0.95em;
+    }
+
+    .formula-card {
+      background: var(--surface-1);
+      border-left: 8px solid var(--accent-blue);
+      padding: 24px 28px;
+      border-radius: 16px;
+      margin: 24px 0;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-dim);
+    }
+
+    .formula-card.large {
+      font-size: 1.6rem;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .stat-panel {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: var(--surface-2);
+      border-radius: 20px;
+      padding: 22px 18px;
+      border: 1px solid var(--border-dim);
+      backdrop-filter: blur(4px);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--accent-green);
+      margin-bottom: 8px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .image-frame {
+      background: #0f1724;
+      border-radius: 24px;
+      padding: 20px;
+      border: 1px solid #2e405b;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     .image-frame img {
       max-width: 100%;
-      max-height: 72vh;
+      max-height: 400px;
       object-fit: contain;
-      border-radius: 6px;
+      border-radius: 12px;
     }
-    .wide img {
-      max-height: 62vh;
-    }
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 18px;
-    }
-    .stat {
-      background: #ffffff;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 18px;
-    }
-    .stat strong {
-      display: block;
-      font-size: 32px;
-      color: var(--green);
-      margin-bottom: 8px;
-    }
-    .progress {
+
+    /* netlify-style progress */
+    .progress-container {
       position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 8px;
-      background: #e2e7ec;
-      z-index: 10;
+      bottom: 24px;
+      left: 80px;
+      right: 80px;
+      height: 4px;
+      background: #1e2a3a;
+      border-radius: 100px;
+      z-index: 30;
     }
-    .bar {
+
+    .progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--green), var(--blue), var(--rose));
-      transition: width 240ms ease;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-blue), var(--accent-rose));
+      border-radius: 100px;
+      transition: width 0.2s ease;
     }
-    .nav {
+
+    .nav-hint {
       position: fixed;
-      right: 24px;
-      bottom: 22px;
-      z-index: 11;
-      font-size: 16px;
-      background: #ffffff;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 8px 12px;
+      bottom: 36px;
+      right: 80px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-family: "JetBrains Mono", monospace;
+      z-index: 31;
+      background: var(--surface-1);
+      padding: 6px 18px;
+      border-radius: 40px;
+      border: 1px solid var(--border-dim);
     }
-    .accent-green { color: var(--green); }
-    .accent-blue { color: var(--blue); }
-    .accent-rose { color: var(--rose); }
-    @media (max-width: 900px) {
-      body {
-        overflow: auto;
-      }
-      .deck {
-        height: auto;
-      }
-      .slide,
-      .slide.active {
-        min-height: 100vh;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        padding: 32px 22px 68px;
-      }
-      h1 { font-size: 38px; }
-      h2 { font-size: 30px; }
-      p, li { font-size: 18px; }
-      .formula { font-size: 20px; }
-      .image-frame img { max-height: 48vh; }
+
+    .dot-indicators {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 32;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 10px;
+      background: #3a4a5e;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: var(--accent-blue);
+      width: 24px;
+    }
+
+    /* accent text */
+    .accent-green { color: var(--accent-green); }
+    .accent-blue { color: var(--accent-blue); }
+    .accent-rose { color: var(--accent-rose); }
+    .accent-gold { color: var(--accent-gold); }
+
+    /* report theory card */
+    .theory-card {
+      background: #111a26;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #2a3a50;
+      margin-bottom: 20px;
+    }
+
+    /* responsive */
+    @media (max-width: 1000px) {
+      .slide { padding: 30px 25px; }
+      h1 { font-size: 2.8rem; }
+      .slide.two-column { grid-template-columns: 1fr; gap: 24px; }
     }
   </style>
 </head>
 <body>
-  <main class="deck">
-    <section class="slide active">
-      <div>
-        <div class="tag">Member 3: Data Scientist Track</div>
-        <h1>Perfect <span class="accent-green">[[5,1,3]]</span> Quantum Error Correction</h1>
-        <p>Protect one logical qubit using five physical qubits, then test when error correction helps.</p>
+<div class="deck">
+  <!-- SLIDES — content from presentation.html, restructured with exploration/report tone -->
+  
+  <!-- 1. Title slide (two-column) -->
+  <section class="slide active two-column">
+    <div>
+      <div class="slide-header">
+        <span class="slide-tag">QMQC · data scientist track</span>
+        <span class="slide-number">1 / 18</span>
       </div>
-      <div class="image-frame"><img src="figures/perfect_code_structure.png" alt="Perfect code structure"></div>
-    </section>
+      <h1>Perfect <span class="accent-green">[[5,1,3]]</span><br>Quantum Error Correction</h1>
+      <p style="font-size:1.4rem; margin-top:1rem;">Protect one logical qubit with five physical qubits.<br>Exploration report: from encoding to threshold.</p>
+      <div class="formula-card" style="margin-top:2rem;">
+        <span style="font-size:1.5rem;">$n=5,\; k=1,\; d=3$</span><br>
+        <span style="color:var(--accent-gold);">smallest code that corrects any single-qubit error</span>
+      </div>
+    </div>
+    <div class="image-frame">
+      <img src="figures/perfect_code_structure.png" alt="Perfect code structure (stabilizer graph)">
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">The problem</div>
-        <h2>Quantum information is fragile</h2>
-        <ul>
-          <li>Bit flips change computational basis states.</li>
-          <li>Phase flips damage superpositions.</li>
-          <li>Gates, measurement, decoherence, and crosstalk all add noise.</li>
-        </ul>
+  <!-- 2. Fragility & motivation -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">exploration · theory</span><span class="slide-number">2 / 18</span></div>
+      <h2>Quantum fragility</h2>
+      <p>Bit flips ($X$), phase flips ($Z$), and combinations ($Y$) destroy superposition. Without protection, decoherence and gate noise erase quantum advantage.</p>
+      <div class="theory-card">
+        <h3 style="margin-top:0;">No-cloning theorem</h3>
+        <p>We cannot copy $|\psi\rangle = \alpha|0\rangle+\beta|1\rangle$. Instead, QEC spreads the state across entangled physical qubits: $|\psi_L\rangle = \alpha|0_L\rangle+\beta|1_L\rangle$.</p>
       </div>
-      <div class="formula">Long computation + noisy hardware = lost quantum state</div>
-    </section>
+    </div>
+    <div class="formula-card large">
+      $$\text{Long computation } + \text{ noisy hardware} = \text{lost quantum state}$$
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">The quantum twist</div>
-        <h2>We cannot simply copy a qubit</h2>
-        <p>Classical repetition copies a bit. Quantum states cannot be cloned.</p>
-        <p>QEC instead spreads one logical state across entangled physical qubits.</p>
-      </div>
-      <div class="formula">|psi> = alpha|0> + beta|1><br><br>|psi_L> = alpha|0_L> + beta|1_L></div>
-    </section>
+  <!-- 3. QEC workflow -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">encode · detect · correct</span><span class="slide-number">3 / 18</span></div>
+      <h2>Syndrome extraction</h2>
+      <p>Stabilizer measurements reveal <em>which error occurred</em> — without collapsing the logical information.</p>
+      <ul>
+        <li><code>S1 = X Z Z X I</code></li>
+        <li><code>S2 = I X Z Z X</code></li>
+        <li><code>S3 = X I X Z Z</code></li>
+        <li><code>S4 = Z X I X Z</code></li>
+      </ul>
+    </div>
+    <div class="image-frame">
+      <img src="figures/qec_process_flow.png" alt="QEC process flow">
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">The process</div>
-        <h2>Encode, detect, correct</h2>
-        <p>The syndrome tells us what kind of error happened without measuring the logical information itself.</p>
-      </div>
-      <div class="image-frame wide"><img src="figures/qec_process_flow.png" alt="QEC process flow"></div>
-    </section>
+  <!-- 4. Why the 5-qubit code (exploration context) -->
+  <section class="slide report-grid">
+    <div style="grid-column: span 2;">
+      <div class="slide-header"><span class="slide-tag">code selection · report</span><span class="slide-number">4 / 18</span></div>
+      <h2>Why the [[5,1,3]] perfect code?</h2>
+    </div>
+    <div class="stat-card"><strong>Smallest</strong> arbitrary single-qubit QEC code</div>
+    <div class="stat-card"><strong>Dense stabilizers</strong> 4 generators, 16 syndromes</div>
+    <div class="stat-card"><strong>Clear syndrome table</strong> each of 15 non-identity errors unique</div>
+    <div class="stat-card"><strong>Ideal teaching</strong> illustrates fault-tolerance concepts</div>
+    <div style="grid-column: span 2;" class="theory-card">
+      <p><span class="accent-blue">▶ Exploration insight:</span> The code saturates the quantum Hamming bound: $2^{n-k} \ge \sum_{j=0}^{t} 3^j \binom{n}{j}$. For $n=5, t=1$, LHS=16, RHS=16.</p>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">The code</div>
-        <h2>Why the five-qubit code matters</h2>
-        <ul>
-          <li><code>n=5</code>: physical qubits</li>
-          <li><code>k=1</code>: logical qubit</li>
-          <li><code>d=3</code>: code distance</li>
-          <li><code>t=1</code>: one arbitrary error corrected</li>
-        </ul>
-      </div>
-      <div class="stat-grid">
-        <div class="stat"><strong>Smallest</strong> arbitrary single-qubit QEC code</div>
-        <div class="stat"><strong>Dense</strong> stabilizer structure</div>
-        <div class="stat"><strong>Clear</strong> syndrome table</div>
-        <div class="stat"><strong>Ideal</strong> teaching example</div>
-      </div>
-    </section>
+  <!-- 5. Unique syndromes -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">syndrome decoding</span><span class="slide-number">5 / 18</span></div>
+      <h2>Unique error signatures</h2>
+      <p>All 15 single-qubit Pauli errors ($X_i, Y_i, Z_i$) produce distinct syndromes, enabling perfect identification.</p>
+    </div>
+    <div class="image-frame">
+      <img src="figures/member3_unique_syndromes.png" alt="Unique syndromes table">
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Stabilizers</div>
-        <h2>Each correctable error has a syndrome</h2>
-        <p><code>S1=XZZXI</code>, <code>S2=IXZZX</code>, <code>S3=XIXZZ</code>, <code>S4=ZXIXZ</code></p>
-      </div>
-      <div class="image-frame"><img src="figures/member3_unique_syndromes.png" alt="Unique syndromes"></div>
-    </section>
+  <!-- 6. Demo circuit -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">circuit implementation</span><span class="slide-number">6 / 18</span></div>
+      <h2>Qiskit demo</h2>
+      <p>Encoding → intentional error → stabilizer measurement → syndrome → correction.</p>
+      <p><code>X</code>, <code>Y</code>, <code>Z</code> errors on each qubit tested.</p>
+    </div>
+    <div class="image-frame">
+      <img src="figures/full_qec_demo_circuit.png" alt="Full QEC demo circuit">
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Circuit</div>
-        <h2>What the demo circuit does</h2>
-        <ul>
-          <li>Initializes the encoded state.</li>
-          <li>Injects a sample physical error.</li>
-          <li>Extracts the stabilizer syndrome.</li>
-        </ul>
+  <!-- 7. Noiseless proof -->
+  <section class="slide centered">
+    <div style="max-width: 900px;">
+      <div class="slide-header"><span class="slide-tag">verification</span><span class="slide-number">7 / 18</span></div>
+      <h2>Noiseless recovery: all 15 errors</h2>
+      <div class="stat-panel">
+        <div class="stat-card"><strong>0.9999999999999998</strong> minimum fidelity</div>
+        <div class="stat-card"><strong>100%</strong> syndrome distinguishes</div>
       </div>
-      <div class="image-frame wide"><img src="figures/full_qec_demo_circuit.png" alt="Full QEC demo circuit"></div>
-    </section>
-
-    <section class="slide">
-      <div>
-        <div class="tag">Noiseless proof</div>
-        <h2>All 15 single-qubit Pauli errors recover</h2>
-        <p>The exact simulation checks <code>X</code>, <code>Y</code>, and <code>Z</code> on all five qubits.</p>
-        <div class="stat"><strong>0.9999999999999998</strong> minimum recovered fidelity</div>
+      <div class="image-frame" style="margin-top: 20px;">
+        <img src="figures/member3_all_single_error_fidelities.png" alt="All single error fidelities">
       </div>
-      <div class="image-frame"><img src="figures/member3_all_single_error_fidelities.png" alt="Single error fidelities"></div>
-    </section>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Theory</div>
-        <h2>Expected error rates</h2>
-        <div class="formula">No QEC: 2p/3</div>
-        <div class="formula">Perfect code: 1 - (1-p)^5 - 5p(1-p)^4</div>
+  <!-- 8. Theory: error rates -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">analytical model</span><span class="slide-number">8 / 18</span></div>
+      <h2>Expected logical error</h2>
+      <p>Physical error rate $p$.</p>
+      <div class="formula-card">
+        <span>No QEC: $P_L \approx \frac{2}{3}p$</span><br>
+        <span>Perfect code (t=1): $P_L = 1 - (1-p)^5 - 5p(1-p)^4$</span>
       </div>
-      <div class="image-frame"><img src="figures/theory_expected_error_rates.png" alt="Theory expected error rates"></div>
-    </section>
+      <p>Crossing point (pseudothreshold) ~ $0.13755$ for one round.</p>
+    </div>
+    <div class="image-frame">
+      <img src="figures/theory_expected_error_rates.png" alt="Theory expected error rates">
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Results</div>
-        <h2>Physical error vs logical error</h2>
-        <p>We sweep <code>p=0</code> to <code>p=0.05</code>, run 1000 shots at each point, and compute logical error.</p>
+  <!-- 9. Simulated logical vs physical -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">monte carlo results</span><span class="slide-number">9 / 18</span></div>
+      <h2>Logical error suppression</h2>
+      <p>1000 shots per $p$, depolarizing noise. Below pseudothreshold, QEC helps.</p>
+    </div>
+    <div class="image-frame">
+      <img src="figures/member3_physical_vs_logical.png" alt="Physical vs logical error">
+    </div>
+  </section>
+
+  <!-- 10. Threshold plot -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">pseudothreshold</span><span class="slide-number">10 / 18</span></div>
+      <h2>When QEC stops helping</h2>
+      <p>Below crossing, logical error &lt; physical error. Above, multi-error events dominate.</p>
+      <div class="stat-card"><strong>p ≈ 0.1376</strong> one‑round crossing</div>
+    </div>
+    <div class="image-frame">
+      <img src="threshold_plot.png" alt="Threshold plot">
+    </div>
+  </section>
+
+  <!-- 11. Usefulness region -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">practical utility</span><span class="slide-number">11 / 18</span></div>
+      <h2>Best use case</h2>
+      <p>Perfect code shines when qubits are scarce and $p$ is low enough that two‑error probability is small.</p>
+    </div>
+    <div class="image-frame">
+      <img src="figures/perfect_code_useful_region.png" alt="Useful region of perfect code">
+    </div>
+  </section>
+
+  <!-- 12. Code comparison arena -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">benchmarking</span><span class="slide-number">12 / 18</span></div>
+      <h2>Shared arena: four codes</h2>
+      <p>Perfect, Shor, Steane, Bacon-Shor. (Proxy curves until teammate data integrated.)</p>
+    </div>
+    <div class="image-frame">
+      <img src="four_code_comparison.png" alt="Four code comparison">
+    </div>
+  </section>
+
+  <!-- 13. Scaling beyond distance 3 -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">scaling · surface codes</span><span class="slide-number">13 / 18</span></div>
+      <h2>Toward fault tolerance</h2>
+      <p>Increasing distance $d$ exponentially suppresses logical error, at cost of more qubits and rounds.</p>
+    </div>
+    <div class="image-frame">
+      <img src="figures/scaling_surface_code_model.png" alt="Scaling surface code model">
+    </div>
+  </section>
+
+  <!-- 14. Project workflow roadmap -->
+  <section class="slide centered">
+    <div style="max-width: 1000px;">
+      <div class="slide-header"><span class="slide-tag">pipeline</span><span class="slide-number">14 / 18</span></div>
+      <h2>End‑to‑end workflow</h2>
+      <div class="image-frame">
+        <img src="figures/project_workflow_roadmap.png" alt="Project workflow roadmap">
       </div>
-      <div class="image-frame"><img src="figures/member3_physical_vs_logical.png" alt="Member 3 physical vs logical"></div>
-    </section>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Threshold</div>
-        <h2>When does QEC stop helping?</h2>
-        <p>Below the crossing, QEC helps. Above it, overhead and multi-error events dominate.</p>
-        <div class="stat"><strong>p ~= 0.13755</strong> one-round crossing estimate</div>
-      </div>
-      <div class="image-frame"><img src="threshold_plot.png" alt="Threshold plot"></div>
-    </section>
+  <!-- 15. Theory deep dive: stabilizer formalism -->
+  <section class="slide report-grid">
+    <div style="grid-column: span 2;">
+      <div class="slide-header"><span class="slide-tag">exploration · theory</span><span class="slide-number">15 / 18</span></div>
+      <h2>Stabilizer formalism & Pauli group</h2>
+    </div>
+    <div class="theory-card">
+      <p>The code space is the +1 eigenspace of stabilizers $S_i$. Any Pauli error anti-commutes with a subset, yielding a binary syndrome.</p>
+      <p style="margin-top:12px;">$[S_i, S_j]=0$ and $-I \notin S$. The [[5,1,3]] stabilizers generate a group of order 16.</p>
+    </div>
+    <div class="formula-card">
+      $$ \begin{aligned}
+      S_1 &= X Z Z X I \\
+      S_2 &= I X Z Z X \\
+      S_3 &= X I X Z Z \\
+      S_4 &= Z X I X Z
+      \end{aligned} $$
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Usefulness</div>
-        <h2>Best use case</h2>
-        <p>The Perfect code is most useful when qubits are scarce and physical error is low enough that two-error events are rare.</p>
-      </div>
-      <div class="image-frame"><img src="figures/perfect_code_useful_region.png" alt="Perfect code useful region"></div>
-    </section>
+  <!-- 16. Logical operators -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">logical qubit</span><span class="slide-number">16 / 18</span></div>
+      <h2>Logical Paulis</h2>
+      <p>$X_L = X X X X X$ (weight 5)<br>$Z_L = Z Z Z Z Z$<br>They commute with stabilizers and define the encoded qubit.</p>
+    </div>
+    <div class="formula-card">
+      $$ |0_L\rangle = \frac{1}{4} \sum_{M \in S} M |00000\rangle $$
+      $$ |1_L\rangle = X_L |0_L\rangle $$
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Comparison</div>
-        <h2>Shared arena curves</h2>
-        <p>Perfect, Shor, Steane, and Bacon-Shor can be plotted together. Proxy curves are labelled until teammate CSVs arrive.</p>
-      </div>
-      <div class="image-frame"><img src="four_code_comparison.png" alt="Four code comparison"></div>
-    </section>
+  <!-- 17. Future directions -->
+  <section class="slide two-column">
+    <div>
+      <div class="slide-header"><span class="slide-tag">next steps</span><span class="slide-number">17 / 18</span></div>
+      <h2>From simulation to hardware</h2>
+      <ul>
+        <li>Integrate IBM backend noise models.</li>
+        <li>Replace proxy curves with teammate data.</li>
+        <li>Implement repeated syndrome extraction.</li>
+        <li>Study fault-tolerant gadgets.</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <p>Goal: demonstrate that even the smallest code provides a building block for large‑scale fault tolerance.</p>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Scaling</div>
-        <h2>Beyond one-error correction</h2>
-        <p>Increasing distance raises protection but costs more physical qubits and syndrome rounds.</p>
-      </div>
-      <div class="image-frame"><img src="figures/scaling_surface_code_model.png" alt="Scaling surface code model"></div>
-    </section>
+  <!-- 18. Conclusion -->
+  <section class="slide centered">
+    <div>
+      <div class="slide-header"><span class="slide-tag">takeaway</span><span class="slide-number">18 / 18</span></div>
+      <h1 style="font-size:4rem;">The Perfect [[5,1,3]] code<br>proves the QEC concept.</h1>
+      <p style="font-size:1.6rem; max-width:800px; margin:2rem auto;">Detect and correct a physical error without destroying logical quantum information.</p>
+      <div class="formula-card" style="background: #15222e;">QEC exploration report · QMQC project · CCDS</div>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Workflow</div>
-        <h2>Whole project pipeline</h2>
-        <p>Build, verify, sweep noise, compare, find threshold, then scale up.</p>
-      </div>
-      <div class="image-frame wide"><img src="figures/project_workflow_roadmap.png" alt="Project workflow roadmap"></div>
-    </section>
+  <!-- Navigation UI -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="nav-hint" id="navHint">←  →  or  click</div>
+  <div class="dot-indicators" id="dotContainer"></div>
+</div>
 
-    <section class="slide">
-      <div>
-        <div class="tag">Future outcomes</div>
-        <h2>What comes next?</h2>
-        <ul>
-          <li>Use live IBM backend noise from the shared arena.</li>
-          <li>Replace proxy curves with teammate results.</li>
-          <li>Run hardware jobs after IBM Runtime is configured.</li>
-          <li>Move from one round to repeated syndrome extraction.</li>
-          <li>Study larger-distance surface-code models.</li>
-        </ul>
-      </div>
-      <div class="formula">Small code for understanding -> larger codes for fault tolerance</div>
-    </section>
+<script>
+  (function(){
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progressBar = document.getElementById('progressBar');
+    const dotContainer = document.getElementById('dotContainer');
+    let currentIdx = 0;
+    const total = slides.length;
 
-    <section class="slide single">
-      <div class="tag">Takeaway</div>
-      <h1>The Perfect [[5,1,3]] code proves the core QEC idea.</h1>
-      <p>Detect and correct a physical error without destroying the logical quantum information.</p>
-    </section>
-  </main>
-  <div class="nav">Use left/right arrows or click</div>
-  <div class="progress"><div class="bar"></div></div>
-  <script>
-    const slides = [...document.querySelectorAll('.slide')];
-    const bar = document.querySelector('.bar');
-    let index = 0;
-    function show(next) {
-      index = Math.max(0, Math.min(slides.length - 1, next));
-      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
-      bar.style.width = `${((index + 1) / slides.length) * 100}%`;
+    // create dots
+    function renderDots() {
+      dotContainer.innerHTML = '';
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'dot' + (i === currentIdx ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotContainer.appendChild(dot);
+      }
     }
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowRight' || event.key === ' ') show(index + 1);
-      if (event.key === 'ArrowLeft') show(index - 1);
-      if (event.key === 'Home') show(0);
-      if (event.key === 'End') show(slides.length - 1);
+
+    function goTo(index) {
+      if (index < 0) index = 0;
+      if (index >= total) index = total - 1;
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === index);
+      });
+      currentIdx = index;
+      const percent = ((index + 1) / total) * 100;
+      progressBar.style.width = percent + '%';
+      
+      // update dots
+      const dots = dotContainer.querySelectorAll('.dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+      
+      // update hint
+      const hint = document.getElementById('navHint');
+      hint.innerHTML = `${index+1}/${total}  ←  →  or  click`;
+    }
+
+    function next() { goTo(currentIdx + 1); }
+    function prev() { goTo(currentIdx - 1); }
+
+    // keyboard
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prev();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goTo(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goTo(total - 1);
+      }
     });
-    document.addEventListener('click', () => show(index + 1));
-    show(0);
-  </script>
+
+    // click anywhere (except dots) for next
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.dot')) return;
+      next();
+    });
+
+    // touch swipe? simple: click to advance.
+
+    renderDots();
+    goTo(0); // initial
+  })();
+</script>
+
+<!-- small style tune for active dot -->
+<style>
+  .dot { transition: all 0.2s; }
+  .slide::-webkit-scrollbar { width: 6px; }
+  .slide::-webkit-scrollbar-track { background: #0f1a24; }
+  .slide::-webkit-scrollbar-thumb { background: #2a6f9e; border-radius: 6px; }
+</style>
 </body>
 </html>
