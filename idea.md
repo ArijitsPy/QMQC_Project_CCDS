@@ -23,7 +23,7 @@ To ensure our final data is comparable, **all four algorithms must be built to t
 
 ### 👥 Team Roles & Responsibilities
 
-#### **Member 1: [Insert Name] – The Arena Architect & The Baseline**
+#### **Member 1: Mohamed Akif M (24RJ60R12) – The Arena Architect & The Baseline**
 
 - **The Algorithm:** **Shor 9-Qubit Code**
   - Build the classic concatenated 9-qubit code that corrects one arbitrary error. This serves as our baseline for maximum gate overhead.
@@ -32,7 +32,7 @@ To ensure our final data is comparable, **all four algorithms must be built to t
   - Write the code that fetches the IBM backend noise profile.
   - Build a function that allows us to manually scale the noise probability ($p$) from $0.0$ to $0.5$ so we can find the exact breaking point of each code.
 
-#### **Member 2: [Insert Name] – The Math Heavyweight**
+#### **Member 2: Peela Dinny Abhiram (25CH60R25) – The Math Heavyweight**
 
 - **The Algorithm:** **Steane $[[7, 1, 3]]$ Code**
   - Implement the 7-qubit CSS code based on classical Hamming codes.
@@ -41,7 +41,7 @@ To ensure our final data is comparable, **all four algorithms must be built to t
   - Clearly define the Stabilizer Formalism. Document the $S_x$ and $S_z$ parity check matrices used to generate the syndrome look-up tables.
   - Explain the concept of "transversal gates" and why the Steane code is mathematically elegant.
 
-#### **Member 3: [Insert Name] – The Data Scientist**
+#### **Member 3: Arijit Sikder (25PH91R06) – The Data Scientist**
 
 - **The Algorithm:** **Perfect $[[5, 1, 3]]$ Code**
   - Implement the most compact QEC code possible. Be careful, the encoding circuit is highly dense and entangled!
@@ -50,7 +50,7 @@ To ensure our final data is comparable, **all four algorithms must be built to t
   - Create a graph plotting **Physical Error Rate (X-axis)** vs. **Logical Error Rate (Y-axis)**.
   - Visually prove the "Threshold Theorem" by showing the exact intersection point where the noise from the extra gates outweighs the benefits of the error correction.
 
-#### **Member 4: [Insert Name] – The Industry Rep & Visionary**
+#### **Member 4: Arunangshu Karmakar (23MA10014) – The Industry Rep & Visionary**
 
 - **The Algorithm:** **Bacon-Shor 9-Qubit Subsystem Code**
   - Implement this industry-favorite code that requires fewer active gate measurements.

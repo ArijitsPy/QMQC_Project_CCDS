@@ -1,0 +1,37 @@
+code,source,physical_error,logical_error
+"Perfect [[5,1,3]]",member3_simulation,0.0,0.0
+"Perfect [[5,1,3]]",member3_simulation,0.001,0.0
+"Perfect [[5,1,3]]",member3_simulation,0.005,0.001
+"Perfect [[5,1,3]]",member3_simulation,0.01,0.0
+"Perfect [[5,1,3]]",member3_simulation,0.015,0.001
+"Perfect [[5,1,3]]",member3_simulation,0.02,0.002
+"Perfect [[5,1,3]]",member3_simulation,0.03,0.013
+"Perfect [[5,1,3]]",member3_simulation,0.04,0.015
+"Perfect [[5,1,3]]",member3_simulation,0.05,0.032
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.0,0.0
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.001,7.517949872435162e-05
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.005,0.0018292631850359078
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.01,0.0070732213375696296
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.015,0.015383862341671078
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.02,0.026435908730125218
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.03,0.05557018912205891
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.04,0.09228753561176961
+"Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.05,0.13469655401900515
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.0,0.0
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.001,3.267603734122791e-05
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.005,0.0008033820745324965
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.01,0.0031470692250248344
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.015,0.006934171170770692
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.02,0.012071453820800881
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.03,0.02604135280981043
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.04,0.044380542187500316
+"Steane [[7,1,3]] (proxy)",proxy_until_team_data_arrives,0.05,0.06646553426980972
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.0,0.0
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.001,4.7355153111456466e-05
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.005,0.001158721674973974
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.01,0.004512003836981471
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.015,0.00988262446732227
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.02,0.017102541425678436
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.03,0.0364618840129908
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.04,0.061416111351800806
+"Bacon-Shor [[9,1,3]] (proxy)",proxy_until_team_data_arrives,0.05,0.09091660156461062

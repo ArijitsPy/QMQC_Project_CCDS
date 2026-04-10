@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfect [[5,1,3]] QEC Presentation</title>
+  <style>
+    :root {
+      --ink: #151515;
+      --paper: #f7f9fb;
+      --green: #1f7a4d;
+      --blue: #2a6f9e;
+      --rose: #a3435a;
+      --gold: #9a7a16;
+      --line: #d8dde3;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      overflow: hidden;
+    }
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+    .slide {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      padding: 52px 72px 76px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7f9fb 100%);
+      animation: enter 360ms ease-out;
+    }
+    .slide.active {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .slide.single.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    h1 {
+      font-size: 58px;
+      line-height: 1.04;
+      margin: 0 0 22px;
+      letter-spacing: 0;
+    }
+    h2 {
+      font-size: 42px;
+      line-height: 1.08;
+      margin: 0 0 18px;
+      letter-spacing: 0;
+    }
+    p, li {
+      font-size: 24px;
+      line-height: 1.36;
+    }
+    p {
+      margin: 0 0 18px;
+    }
+    ul {
+      margin: 12px 0 0;
+      padding-left: 28px;
+    }
+    code {
+      background: #eef2f5;
+      border: 1px solid var(--line);
+      padding: 3px 6px;
+      border-radius: 6px;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 0.92em;
+    }
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--green);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      background: #ffffff;
+    }
+    .formula {
+      font-size: 30px;
+      line-height: 1.35;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-left: 8px solid var(--blue);
+      border-radius: 8px;
+      background: #ffffff;
+      margin: 18px 0;
+      font-family: "JetBrains Mono", Consolas, monospace;
+    }
+    .image-frame {
+      width: 100%;
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 18px 44px rgba(21, 21, 21, 0.08);
+    }
+    .image-frame img {
+      max-width: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    .wide img {
+      max-height: 62vh;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .stat {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .stat strong {
+      display: block;
+      font-size: 32px;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 8px;
+      background: #e2e7ec;
+      z-index: 10;
+    }
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--rose));
+      transition: width 240ms ease;
+    }
+    .nav {
+      position: fixed;
+      right: 24px;
+      bottom: 22px;
+      z-index: 11;
+      font-size: 16px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .accent-green { color: var(--green); }
+    .accent-blue { color: var(--blue); }
+    .accent-rose { color: var(--rose); }
+    @media (max-width: 900px) {
+      body {
+        overflow: auto;
+      }
+      .deck {
+        height: auto;
+      }
+      .slide,
+      .slide.active {
+        min-height: 100vh;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        padding: 32px 22px 68px;
+      }
+      h1 { font-size: 38px; }
+      h2 { font-size: 30px; }
+      p, li { font-size: 18px; }
+      .formula { font-size: 20px; }
+      .image-frame img { max-height: 48vh; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide active">
+      <div>
+        <div class="tag">Member 3: Data Scientist Track</div>
+        <h1>Perfect <span class="accent-green">[[5,1,3]]</span> Quantum Error Correction</h1>
+        <p>Protect one logical qubit using five physical qubits, then test when error correction helps.</p>
+      </div>
+      <div class="image-frame"><img src="figures/perfect_code_structure.png" alt="Perfect code structure"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">The problem</div>
+        <h2>Quantum information is fragile</h2>
+        <ul>
+          <li>Bit flips change computational basis states.</li>
+          <li>Phase flips damage superpositions.</li>
+          <li>Gates, measurement, decoherence, and crosstalk all add noise.</li>
+        </ul>
+      </div>
+      <div class="formula">Long computation + noisy hardware = lost quantum state</div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">The quantum twist</div>
+        <h2>We cannot simply copy a qubit</h2>
+        <p>Classical repetition copies a bit. Quantum states cannot be cloned.</p>
+        <p>QEC instead spreads one logical state across entangled physical qubits.</p>
+      </div>
+      <div class="formula">|psi> = alpha|0> + beta|1><br><br>|psi_L> = alpha|0_L> + beta|1_L></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">The process</div>
+        <h2>Encode, detect, correct</h2>
+        <p>The syndrome tells us what kind of error happened without measuring the logical information itself.</p>
+      </div>
+      <div class="image-frame wide"><img src="figures/qec_process_flow.png" alt="QEC process flow"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">The code</div>
+        <h2>Why the five-qubit code matters</h2>
+        <ul>
+          <li><code>n=5</code>: physical qubits</li>
+          <li><code>k=1</code>: logical qubit</li>
+          <li><code>d=3</code>: code distance</li>
+          <li><code>t=1</code>: one arbitrary error corrected</li>
+        </ul>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><strong>Smallest</strong> arbitrary single-qubit QEC code</div>
+        <div class="stat"><strong>Dense</strong> stabilizer structure</div>
+        <div class="stat"><strong>Clear</strong> syndrome table</div>
+        <div class="stat"><strong>Ideal</strong> teaching example</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Stabilizers</div>
+        <h2>Each correctable error has a syndrome</h2>
+        <p><code>S1=XZZXI</code>, <code>S2=IXZZX</code>, <code>S3=XIXZZ</code>, <code>S4=ZXIXZ</code></p>
+      </div>
+      <div class="image-frame"><img src="figures/member3_unique_syndromes.png" alt="Unique syndromes"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Circuit</div>
+        <h2>What the demo circuit does</h2>
+        <ul>
+          <li>Initializes the encoded state.</li>
+          <li>Injects a sample physical error.</li>
+          <li>Extracts the stabilizer syndrome.</li>
+        </ul>
+      </div>
+      <div class="image-frame wide"><img src="figures/full_qec_demo_circuit.png" alt="Full QEC demo circuit"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Noiseless proof</div>
+        <h2>All 15 single-qubit Pauli errors recover</h2>
+        <p>The exact simulation checks <code>X</code>, <code>Y</code>, and <code>Z</code> on all five qubits.</p>
+        <div class="stat"><strong>0.9999999999999998</strong> minimum recovered fidelity</div>
+      </div>
+      <div class="image-frame"><img src="figures/member3_all_single_error_fidelities.png" alt="Single error fidelities"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Theory</div>
+        <h2>Expected error rates</h2>
+        <div class="formula">No QEC: 2p/3</div>
+        <div class="formula">Perfect code: 1 - (1-p)^5 - 5p(1-p)^4</div>
+      </div>
+      <div class="image-frame"><img src="figures/theory_expected_error_rates.png" alt="Theory expected error rates"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Results</div>
+        <h2>Physical error vs logical error</h2>
+        <p>We sweep <code>p=0</code> to <code>p=0.05</code>, run 1000 shots at each point, and compute logical error.</p>
+      </div>
+      <div class="image-frame"><img src="figures/member3_physical_vs_logical.png" alt="Member 3 physical vs logical"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Threshold</div>
+        <h2>When does QEC stop helping?</h2>
+        <p>Below the crossing, QEC helps. Above it, overhead and multi-error events dominate.</p>
+        <div class="stat"><strong>p ~= 0.13755</strong> one-round crossing estimate</div>
+      </div>
+      <div class="image-frame"><img src="threshold_plot.png" alt="Threshold plot"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Usefulness</div>
+        <h2>Best use case</h2>
+        <p>The Perfect code is most useful when qubits are scarce and physical error is low enough that two-error events are rare.</p>
+      </div>
+      <div class="image-frame"><img src="figures/perfect_code_useful_region.png" alt="Perfect code useful region"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Comparison</div>
+        <h2>Shared arena curves</h2>
+        <p>Perfect, Shor, Steane, and Bacon-Shor can be plotted together. Proxy curves are labelled until teammate CSVs arrive.</p>
+      </div>
+      <div class="image-frame"><img src="four_code_comparison.png" alt="Four code comparison"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Scaling</div>
+        <h2>Beyond one-error correction</h2>
+        <p>Increasing distance raises protection but costs more physical qubits and syndrome rounds.</p>
+      </div>
+      <div class="image-frame"><img src="figures/scaling_surface_code_model.png" alt="Scaling surface code model"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Workflow</div>
+        <h2>Whole project pipeline</h2>
+        <p>Build, verify, sweep noise, compare, find threshold, then scale up.</p>
+      </div>
+      <div class="image-frame wide"><img src="figures/project_workflow_roadmap.png" alt="Project workflow roadmap"></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="tag">Future outcomes</div>
+        <h2>What comes next?</h2>
+        <ul>
+          <li>Use live IBM backend noise from the shared arena.</li>
+          <li>Replace proxy curves with teammate results.</li>
+          <li>Run hardware jobs after IBM Runtime is configured.</li>
+          <li>Move from one round to repeated syndrome extraction.</li>
+          <li>Study larger-distance surface-code models.</li>
+        </ul>
+      </div>
+      <div class="formula">Small code for understanding -> larger codes for fault tolerance</div>
+    </section>
+
+    <section class="slide single">
+      <div class="tag">Takeaway</div>
+      <h1>The Perfect [[5,1,3]] code proves the core QEC idea.</h1>
+      <p>Detect and correct a physical error without destroying the logical quantum information.</p>
+    </section>
+  </main>
+  <div class="nav">Use left/right arrows or click</div>
+  <div class="progress"><div class="bar"></div></div>
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const bar = document.querySelector('.bar');
+    let index = 0;
+    function show(next) {
+      index = Math.max(0, Math.min(slides.length - 1, next));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      bar.style.width = `${((index + 1) / slides.length) * 100}%`;
+    }
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') show(index + 1);
+      if (event.key === 'ArrowLeft') show(index - 1);
+      if (event.key === 'Home') show(0);
+      if (event.key === 'End') show(slides.length - 1);
+    });
+    document.addEventListener('click', () => show(index + 1));
+    show(0);
+  </script>
+</body>
+</html>

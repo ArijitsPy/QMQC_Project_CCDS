@@ -1,0 +1,8 @@
+{
+  "note": "The 0 to 0.05 sweep is shot-based. The threshold intersection uses an extended exact scan.",
+  "p_sweep_max": 0.05,
+  "p_sweep_min": 0.0,
+  "seed": 513,
+  "shots": 1000,
+  "threshold_intersection_estimate": 0.137550033299765
+}

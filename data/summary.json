@@ -1,0 +1,26 @@
+{
+  "alpha": [
+    0.8491090694781162,
+    0.0
+  ],
+  "beta": [
+    0.3932617537754732,
+    0.3526456878333364
+  ],
+  "code": "[[5,1,3]] perfect stabilizer code",
+  "logical_x": "XXXXX",
+  "logical_z": "ZZZZZ",
+  "phi": 0.731,
+  "random_trials_per_p": 3000,
+  "seed": 513,
+  "single_error_max_fidelity_before": 9.058141176966309e-33,
+  "single_error_min_fidelity_after": 0.9999999999999998,
+  "stabilizers": [
+    "XZZXI",
+    "IXZZX",
+    "XIXZZ",
+    "ZXIXZ"
+  ],
+  "theta": 1.113,
+  "threshold_intersection_estimate": 0.1374958214559692
+}
